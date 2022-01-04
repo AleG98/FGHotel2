@@ -20,7 +20,7 @@ public class BookingListener {
 
     @KafkaListener(topics="${KAFKA_MAIN_TOPIC}")
     public void listen(String message) {
-        System.out.println("Received message " + message);
+        System.out.println("Received message dal main topic" + message);
 
         String[] messageParts = message.split("\\|");
 
@@ -28,12 +28,14 @@ public class BookingListener {
             String uid = messageParts[1];
             OrchestratorService orchestratorService = new OrchestratorService();
            orchestratorService.bookingRoom(messageParts);
-
-
+            System.out.println("fine saga?");
+/*
             repository.existsById(new ObjectId(uid)).flatMap(exists -> {
                 kafkaTemplate.send(mainTopic, (exists?"UserExists|":"UserNotExists|") + messageParts[2]);
                 return Mono.just(exists);
             }).subscribe();
+
+ */
         }
     }
 }

@@ -40,6 +40,7 @@ public class OrchestratorService implements SimpleSaga<Booking> {
     SagaDefinition<Booking> sagaDefinition;
     private String[] prenotazione;
     public Mono<String> bookingRoom (final String[] prenotazione){
+        System.out.println("All'interno di booking room, prima degli step");
         //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);
             this.prenotazione=prenotazione;
          sagaDefinition = step()
@@ -66,6 +67,8 @@ public class OrchestratorService implements SimpleSaga<Booking> {
                 .then(Mono.fromCallable(() -> getResponseDTO(prenotazione, BookingStatus.CONFIRMED)))
                 .onErrorResume(ex -> this.revertOrder(orderWorkflow, prenotazione));
 */
+
+        System.out.println("All'interno di booking room, alla fine degli step");
     return Mono.just("ciao");
     }
 
@@ -78,16 +81,19 @@ public class OrchestratorService implements SimpleSaga<Booking> {
 
 
     private CommandWithDestination foundUser(Booking booking) {
+        System.out.println("All'interno di CommandWithDestination foundUser");
         return send(new userCommand(prenotazione[2]))
                 .to("userService")
                 .build();
     }
 
     private void create(Booking bookingb) {
+        System.out.println("All'interno di create del primo step");
         Booking booking= BookingService.createBooking(prenotazione[5], prenotazione[2],prenotazione[3],prenotazione[4], prenotazione[1]);
     }
 
     private CommandWithDestination reserveRoom(Booking booking) {
+        System.out.println("All'interno di CommandWithDestination reserveRoom");
         return send(new ReserveRoomCommand(prenotazione[5],prenotazione[2],prenotazione[3],prenotazione[4]))
                 .to("hotelService")
                 .build();
@@ -100,6 +106,7 @@ public class OrchestratorService implements SimpleSaga<Booking> {
 
 
     private CommandWithDestination approve(Booking booking) {
+        System.out.println("All'interno di CommandWithDestination approve");
         return send(new RejectOrderCommand(Long.parseLong(booking.get_Id_string())))
                 .to("orderService")
                 .build(); // da modificare
