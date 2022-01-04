@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Booking{
@@ -12,7 +14,8 @@ public class Booking{
     private ObjectId _id;
     private ObjectId idHotel;
     private ObjectId roomId;
-    private Date date;
+    private LocalDate datebegin;
+    private LocalDate dateend;
     private ObjectId userId;
     private BookingStatus bookingStatus;
 
@@ -21,9 +24,18 @@ public class Booking{
         this._id = new ObjectId();
         this.idHotel = idHotel;
         this.roomId = roomId;
-        this.date = date;
+        //this.date = date;
         this.userId = userId;
         this.bookingStatus= BookingStatus.PENDING;
+    }
+    public Booking(String idHotel, String roomId, String datebegin, String dateend, String userId){
+        this._id = new ObjectId();
+        this.bookingStatus= BookingStatus.PENDING;
+        this.idHotel = new ObjectId(idHotel);
+        this.roomId =  new ObjectId(roomId);
+        this.datebegin= LocalDate.now(); //aggiustare
+        this.dateend= LocalDate.now();
+        this.userId =  new ObjectId(userId);
     }
     @JsonCreator
     public Booking(Object idHotel, Object roomId) {
@@ -54,12 +66,20 @@ public class Booking{
         this.roomId = roomId;
     }
 
-    public Date getDate() {
-        return date;
+    public LocalDate getDatebegin() {
+        return datebegin;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDatebegin(LocalDate datebegin) {
+        this.datebegin = datebegin;
+    }
+
+    public LocalDate getDateend() {
+        return dateend;
+    }
+
+    public void setDateend(LocalDate dateend) {
+        this.dateend = dateend;
     }
 
     public ObjectId getUserId() {
@@ -76,7 +96,7 @@ public class Booking{
 
 
 
-    @JsonGetter("_id")
+    @JsonGetter("idHotel")
     public String get_idHotel_string() {
         return idHotel.toHexString();
     }
@@ -90,11 +110,18 @@ public class Booking{
     public String get_roomId_string() {
         return roomId.toHexString();
     }
-    @JsonGetter("Date")
-    public String get_Date_string() {
-        return date.toString();
+    @JsonGetter("_id")
+    public String get_Id_string() {
+        return _id.toHexString();
     }
-
+    @JsonGetter("Dateend")
+    public String get_Dateend_string() {
+        return dateend.toString();
+    }
+    @JsonGetter("Datebegin")
+    public String get_Datebegin_string() {
+        return datebegin.toString();
+    }
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }

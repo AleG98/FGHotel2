@@ -71,7 +71,7 @@ public class BookingController {
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         return repository.save(o).flatMap(order -> {
             //System.out.println("Sending on the topic");
-            kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_roomId_string()+ "|" + o.get_Date_string()+ "|"+ o.get_idHotel_string());
+            kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_roomId_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string());
             return Mono.just(o);
         });
         //return o;

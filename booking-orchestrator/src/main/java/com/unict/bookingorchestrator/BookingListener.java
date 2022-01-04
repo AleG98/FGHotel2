@@ -27,7 +27,7 @@ public class BookingListener {
         if (messageParts[0].equals("BookingCreated")) {
             String uid = messageParts[1];
             OrchestratorService orchestratorService = new OrchestratorService();
-           // orchestratorService.bookingRoom(messageParts); rimettere
+           orchestratorService.bookingRoom(messageParts);
 
 
             repository.existsById(new ObjectId(uid)).flatMap(exists -> {

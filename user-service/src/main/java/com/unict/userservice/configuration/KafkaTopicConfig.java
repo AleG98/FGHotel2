@@ -19,7 +19,8 @@ public class KafkaTopicConfig {
 
     @Value(value = "${KAFKA_MAIN_TOPIC}")
     private String kafkaMainTopic;
-
+    @Value(value = "${KAFKA_MAIN_TOPIC2}")
+    private String kafkaMainTopic2;
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
