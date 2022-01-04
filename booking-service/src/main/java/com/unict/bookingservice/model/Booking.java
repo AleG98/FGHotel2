@@ -28,6 +28,7 @@ public class Booking{
         this.userId = userId;
         this.bookingStatus= BookingStatus.PENDING;
     }
+    @JsonCreator
     public Booking(String idHotel, String roomId, String datebegin, String dateend, String userId){
         this._id = new ObjectId();
         this.bookingStatus= BookingStatus.PENDING;

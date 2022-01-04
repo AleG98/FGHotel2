@@ -1,6 +1,6 @@
 package com.unict.bookingservice.configuration;
 
-import com.unict.userservice.kafka.BookingListener;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +41,4 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-    @Bean
-    public BookingListener bookingListener2() {
-        return new BookingListener();
-    }
-}
+  }

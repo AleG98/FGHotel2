@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service
+  name: booking-service
 spec:
   selector:
     matchLabels:
-      app: order-service
+      app: booking-service
   template:
     metadata:
       labels:
-        app: order-service
+        app: booking-service
     spec:
       containers:
-        - name: order-service
-          image: order-service:v1
+        - name: booking-service
+          image: booking-service:v1
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: order-service-db-env-file
+                name: booking-service-db-env-file
             - configMapRef:
-                name: order-service-env-file
+                name: booking-service-env-file
             - secretRef:
-                name: order-service-db-secret-file
+                name: booking-service-db-secret-file
 

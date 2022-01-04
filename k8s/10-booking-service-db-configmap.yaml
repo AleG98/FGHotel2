@@ -3,4 +3,4 @@ data:
   MONGO_INITDB_DATABASE: admin
 kind: ConfigMap
 metadata:
-  name: order-service-db-env-file
+  name: booking-service-db-env-file

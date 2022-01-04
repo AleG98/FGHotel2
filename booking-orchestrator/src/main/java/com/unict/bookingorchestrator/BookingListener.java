@@ -1,6 +1,6 @@
 package com.unict.bookingorchestrator;
 
-import com.unict.bookingservice.repository.ReactiveBookingRepository;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +9,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import reactor.core.publisher.Mono;
 
 public class BookingListener {
-    @Autowired
-    ReactiveBookingRepository repository;
+    //@Autowired
+   // ReactiveBookingRepository repository;
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;

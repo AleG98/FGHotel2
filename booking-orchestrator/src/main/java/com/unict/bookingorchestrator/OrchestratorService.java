@@ -1,43 +1,30 @@
 package com.unict.bookingorchestrator;
 
-import com.unict.bookingorchestrator.steps.UserStep;
-import com.unict.bookingservice.controller.BookingService;
-import com.unict.bookingservice.model.Booking;
-import com.unict.bookingservice.model.BookingStatus;
-import com.unict.bookingservice.repository.ReactiveBookingRepository;
-import com.unict.hotelservice.roomNotAvailable;
-import com.unict.hotelservice.roomNotFound;
-import io.eventuate.examples.tram.sagas.ordersandcustomers.orders.sagas.createorder.CreateOrderSagaData;
-import io.eventuate.examples.tram.sagas.ordersandcustomers.orders.sagas.participants.ReserveCreditCommand;
+
+
+
 import io.eventuate.examples.tram.sagas.ordersandcustomers.orders.service.RejectOrderCommand;
-import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandWithDestination;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaDefinition;
-import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 import static io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send;
 
 @Service
-public class OrchestratorService implements SimpleSaga<Booking> {
+public class OrchestratorService implements SimpleSaga<String> {
 
 
     private DomainEventPublisher domainEventPublisher;
 
-    private BookingService bookingService;
-    private ReactiveBookingRepository repository;
+    //private BookingService bookingService;
+    //private ReactiveBookingRepository repository;
     public OrchestratorService() {
-        bookingService=new BookingService(repository);
+        //bookingService=new BookingService(repository);
     }
-    SagaDefinition<Booking> sagaDefinition;
+    SagaDefinition<String> sagaDefinition;
     private String[] prenotazione;
     public Mono<String> bookingRoom (final String[] prenotazione){
         System.out.println("All'interno di booking room, prima degli step");
@@ -47,7 +34,7 @@ public class OrchestratorService implements SimpleSaga<Booking> {
                 .invokeLocal(this::create)
                 .withCompensation(this::reject)
                  .step().invokeParticipant(this::foundUser)
-                 .withCompensation(this::reject)
+                 //.withCompensation(this::reject)
                  .step()
                 .invokeParticipant(this::reserveRoom)
                // .onReply(roomNotFound.class, this::handleCustomerNotFound)
@@ -80,19 +67,19 @@ public class OrchestratorService implements SimpleSaga<Booking> {
     }
 
 
-    private CommandWithDestination foundUser(Booking booking) {
+    private CommandWithDestination foundUser(String booking) {
         System.out.println("All'interno di CommandWithDestination foundUser");
         return send(new userCommand(prenotazione[2]))
                 .to("userService")
                 .build();
     }
 
-    private void create(Booking bookingb) {
+    private void create(String bookingb) {
         System.out.println("All'interno di create del primo step");
-        Booking booking= BookingService.createBooking(prenotazione[5], prenotazione[2],prenotazione[3],prenotazione[4], prenotazione[1]);
+       // Booking booking= BookingService.createBooking(prenotazione[5], prenotazione[2],prenotazione[3],prenotazione[4], prenotazione[1]);
     }
 
-    private CommandWithDestination reserveRoom(Booking booking) {
+    private CommandWithDestination reserveRoom(String booking) {
         System.out.println("All'interno di CommandWithDestination reserveRoom");
         return send(new ReserveRoomCommand(prenotazione[5],prenotazione[2],prenotazione[3],prenotazione[4]))
                 .to("hotelService")
@@ -100,22 +87,22 @@ public class OrchestratorService implements SimpleSaga<Booking> {
     }
 
     @Override
-    public SagaDefinition<Booking> getSagaDefinition() {
+    public SagaDefinition<String> getSagaDefinition() {
         return this.sagaDefinition;
     }
 
 
-    private CommandWithDestination approve(Booking booking) {
+    private void approve(String booking) {
         System.out.println("All'interno di CommandWithDestination approve");
-        return send(new RejectOrderCommand(Long.parseLong(booking.get_Id_string())))
-                .to("orderService")
-                .build(); // da modificare
+       // return send(new RejectOrderCommand(Long.parseLong(booking.get_Id_string())))
+               // .to("orderService")
+              //  .build(); // da modificare
     }
 
-    private CommandWithDestination reject(Booking booking) {
-        return send(new RejectOrderCommand(Long.parseLong(booking.get_Id_string())))
-                .to("orderService")
-                .build();
+    private void reject(String booking) {
+        //return send(new RejectOrderCommand(Long.parseLong(booking.get_Id_string())))
+              //  .to("orderService")
+               // .build(); // da modificare (non era void)
     }
 
 

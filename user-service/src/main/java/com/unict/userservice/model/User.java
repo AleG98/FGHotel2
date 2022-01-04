@@ -20,9 +20,9 @@ public class User {
         this.name = name;
         this._id = new ObjectId();
     }
-
+    @JsonCreator
     public User(ObjectId _id, String name, String surname, String address, String phoneNo) {
-        this._id = _id;
+        this._id = new ObjectId();
         this.name = name;
         this.surname = surname;
         this.address = address;
