@@ -3,7 +3,6 @@ data:
   KAFKA_ADDRESS: kafkaa:9092
   KAFKA_GROUP_ID: booking-service-group
   KAFKA_MAIN_TOPIC: main-topic
-  KAFKA_MAIN_TOPIC2: main-topic2
   MONGODB_HOSTNAME: booking-service-db
   MONGODB_PORT: "27017"
 kind: ConfigMap

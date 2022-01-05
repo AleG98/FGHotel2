@@ -10,23 +10,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private ObjectId _id;
-    private String name;
-    private String surname;
+   private String name;
+   /* private String surname;
     private String address;
     private String phoneNo;
-
+*/
     @JsonCreator
     public User(String name) {
         this.name = name;
         this._id = new ObjectId();
     }
+    /*
     @JsonCreator
     public User(ObjectId _id, String name, String surname, String address, String phoneNo) {
         this._id = new ObjectId();
         this.name = name;
-        this.surname = surname;
-        this.address = address;
-        this.phoneNo = phoneNo;
+       // this.surname = surname;
+        //this.address = address;
+        //this.phoneNo = phoneNo;
     }
 
     public String getSurname() {
@@ -52,7 +53,7 @@ public class User {
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
     }
-
+*/
     public ObjectId get_id() {
         return _id;
     }
@@ -73,7 +74,7 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-
+/*
     @Override
     public String toString() {
         return "User{" +
@@ -84,4 +85,6 @@ public class User {
                 ", phoneNo='" + phoneNo + '\'' +
                 '}';
     }
+    
+ */
 }
