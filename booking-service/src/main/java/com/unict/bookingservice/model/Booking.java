@@ -18,7 +18,7 @@ public class Booking{
     private LocalDate dateend;
     private ObjectId userId;
     private BookingStatus bookingStatus;
-
+/*
     @JsonCreator
     public Booking(ObjectId idHotel, ObjectId roomId, Date date, ObjectId userId) {
         this._id = new ObjectId();
@@ -28,6 +28,8 @@ public class Booking{
         this.userId = userId;
         this.bookingStatus= BookingStatus.PENDING;
     }
+
+ */
     @JsonCreator
     public Booking(String idHotel, String roomId, String datebegin, String dateend, String userId){
         this._id = new ObjectId();
@@ -37,8 +39,9 @@ public class Booking{
         this.datebegin= LocalDate.now(); //aggiustare
         this.dateend= LocalDate.now();
         this.userId =  new ObjectId(userId);
+        this.bookingStatus= BookingStatus.PENDING;
+        System.out.println("Booking creato da costruttore");
     }
-    @JsonCreator
     public Booking(Object idHotel, Object roomId) {
 
     }
