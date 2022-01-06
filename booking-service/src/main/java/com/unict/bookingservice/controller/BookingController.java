@@ -70,11 +70,15 @@ public class BookingController {
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         System.out.println("dentro newBooking");
-        return repository.save(o).flatMap(order -> {
-            System.out.println("Sending on the topic");
-            kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_roomId_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string());
+       // kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|" + o.get_Id_string());
+
+        return repository.save(o).flatMap(booking -> {
+           // System.out.println("Sending on the topic");
+            kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
             return Mono.just(o);
         });
+
+        //return Mono.just(o);
         //return o;
     }
 

@@ -13,7 +13,7 @@ public class Booking{
     @Id
     private ObjectId _id;
     private ObjectId idHotel;
-    private ObjectId roomId;
+    private String room;  //le stanze vanno da 1 a 10
     private LocalDate datebegin;
     private LocalDate dateend;
     private ObjectId userId;
@@ -31,11 +31,11 @@ public class Booking{
 
  */
     @JsonCreator
-    public Booking(String idHotel, String roomId, String datebegin, String dateend, String userId){
+    public Booking(String idHotel, String room, String datebegin, String dateend, String userId){
         this._id = new ObjectId();
         this.bookingStatus= BookingStatus.PENDING;
         this.idHotel = new ObjectId(idHotel);
-        this.roomId =  new ObjectId(roomId);
+        this.room =  room;
         this.datebegin= LocalDate.now(); //aggiustare
         this.dateend= LocalDate.now();
         this.userId =  new ObjectId(userId);
@@ -62,12 +62,8 @@ public class Booking{
         this.idHotel = idHotel;
     }
 
-    public ObjectId getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(ObjectId roomId) {
-        this.roomId = roomId;
+    public void setRoom(String room) {
+        this.room = room;
     }
 
     public LocalDate getDatebegin() {
@@ -110,22 +106,24 @@ public class Booking{
         return userId.toHexString();
     }
 
-    @JsonGetter("roomId")
-    public String get_roomId_string() {
-        return roomId.toHexString();
-    }
+    @JsonGetter("room")
+    public String get_room_string() { return room; }
+
     @JsonGetter("_id")
     public String get_Id_string() {
         return _id.toHexString();
     }
+
     @JsonGetter("Dateend")
     public String get_Dateend_string() {
         return dateend.toString();
     }
+
     @JsonGetter("Datebegin")
     public String get_Datebegin_string() {
         return datebegin.toString();
     }
+
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }

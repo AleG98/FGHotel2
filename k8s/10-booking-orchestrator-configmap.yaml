@@ -3,6 +3,8 @@ data:
   KAFKA_ADDRESS: kafkaa:9092
   KAFKA_GROUP_ID: booking-orchestrator-group
   KAFKA_MAIN_TOPIC: main-topic
+  KAFKA_USER_REQUEST_TOPIC: user-request-topic
+  KAFKA_USER_RESPONSE_TOPIC: user-response-topic
   MONGODB_HOSTNAME: booking-orchestrator-db
   MONGODB_PORT: "27017"
 kind: ConfigMap

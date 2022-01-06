@@ -1,3 +1,5 @@
+/*
+
 package com.unict.bookingorchestrator;
 
 import io.eventuate.examples.tram.sagas.ordersandcustomers.commondomain.Money;
@@ -51,3 +53,5 @@ public class ReserveRoomCommand implements Command {
         this.dateend = dateend;
     }
 }
+
+ */

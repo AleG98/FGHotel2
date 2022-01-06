@@ -20,6 +20,14 @@ public class KafkaTopicConfig {
     @Value(value = "${KAFKA_MAIN_TOPIC}")
     private String kafkaMainTopic;
 
+    @Value(value = "${KAFKA_USER_REQUEST_TOPIC}")
+    private String userRequestTopic;
+
+    @Value(value = "${KAFKA_USER_RESPONSE_TOPIC}")
+    private String userResponseTopic;
+
+
+
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
@@ -31,4 +39,17 @@ public class KafkaTopicConfig {
     public NewTopic topic1() {
         return new NewTopic(kafkaMainTopic, 100, (short) 1);
     }
+
+    @Bean
+    public NewTopic topic2() {
+        return new NewTopic(userRequestTopic, 10, (short) 1);
+    }
+
+    @Bean
+    public NewTopic topic3() {
+        return new NewTopic(userResponseTopic, 10, (short) 1);
+    }
+
+
+
 }

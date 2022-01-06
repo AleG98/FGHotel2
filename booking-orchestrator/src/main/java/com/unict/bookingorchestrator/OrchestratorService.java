@@ -1,34 +1,71 @@
 package com.unict.bookingorchestrator;
 
-
-
+/*
 
 import io.eventuate.examples.tram.sagas.ordersandcustomers.orders.service.RejectOrderCommand;
 import io.eventuate.tram.commands.consumer.CommandWithDestination;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaDefinition;
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
+import static io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send;
+*/
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import reactor.core.publisher.Mono;
 
-import static io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send;
 
+/*
 @Service
 public class OrchestratorService implements SimpleSaga<String> {
+*/
+@Service
+public class OrchestratorService {
 
 
-    private DomainEventPublisher domainEventPublisher;
+    //private DomainEventPublisher domainEventPublisher;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value(value = "${KAFKA_USER_REQUEST_TOPIC}")
+    private String userRequestTopic;
+
 
     //private BookingService bookingService;
     //private ReactiveBookingRepository repository;
     public OrchestratorService() {
         //bookingService=new BookingService(repository);
     }
-    SagaDefinition<String> sagaDefinition;
-    private String[] prenotazione;
-    public Mono<String> bookingRoom (final String[] prenotazione){
+   // SagaDefinition<String> sagaDefinition;
+    //private String prenotazione;
+
+    @KafkaListener(topics="${KAFKA_MAIN_TOPIC}")
+    public Mono<String> bookingRoom (String prenotazione){
+
         System.out.println("All'interno di booking room, prima degli step");
+
+
         //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);
+        String[] prenotazioneParts = prenotazione.split("\\|");
+
+
+        System.out.println("Messaggio arrivato: " + prenotazione);
+
+        //String id = "61d70a91d6018000093d5cb2";
+        //kafkaTemplate.send(userRequestTopic, "61d70a91d6018000093d5cb2");
+        kafkaTemplate.send(userRequestTopic, prenotazioneParts[1]);
+
+
+
+        /*
             this.prenotazione=prenotazione;
          sagaDefinition = step()
                 .invokeLocal(this::create)
@@ -42,6 +79,8 @@ public class OrchestratorService implements SimpleSaga<String> {
                 .step()
                 .invokeLocal(this::approve)
                 .build();
+
+         */
 /*
         return Flux.fromStream(() -> bookingWorkflow.getSteps().stream())
                 .flatMap(WorkflowStep::process)
@@ -59,6 +98,11 @@ public class OrchestratorService implements SimpleSaga<String> {
     return Mono.just("ciao");
     }
 
+    @KafkaListener(topics="${KAFKA_USER_RESPONSE_TOPIC}")
+    public void userResponseListen(String message) {
+        System.out.println("Received message dall'user response topic:" + message);
+    }
+
     private void handleCustomerNotFound() {
     }
 
@@ -66,7 +110,7 @@ public class OrchestratorService implements SimpleSaga<String> {
 
     }
 
-
+/*
     private CommandWithDestination foundUser(String booking) {
         System.out.println("All'interno di CommandWithDestination foundUser");
         return send(new userCommand(prenotazione[2]))
@@ -74,11 +118,13 @@ public class OrchestratorService implements SimpleSaga<String> {
                 .build();
     }
 
+
+ */
     private void create(String bookingb) {
         System.out.println("All'interno di create del primo step");
        // Booking booking= BookingService.createBooking(prenotazione[5], prenotazione[2],prenotazione[3],prenotazione[4], prenotazione[1]);
     }
-
+/*
     private CommandWithDestination reserveRoom(String booking) {
         System.out.println("All'interno di CommandWithDestination reserveRoom");
         return send(new ReserveRoomCommand(prenotazione[5],prenotazione[2],prenotazione[3],prenotazione[4]))
@@ -91,6 +137,8 @@ public class OrchestratorService implements SimpleSaga<String> {
         return this.sagaDefinition;
     }
 
+
+ */
 
     private void approve(String booking) {
         System.out.println("All'interno di CommandWithDestination approve");
