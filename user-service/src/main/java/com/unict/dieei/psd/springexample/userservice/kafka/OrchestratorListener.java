@@ -26,8 +26,8 @@ public class OrchestratorListener {
     public void listen(String message) {
         System.out.println("Received message dall'user request dell'orchestratore: " + message);
 
-     /*  String[] messageParts = message.split("\\|");
-
+      String[] messageParts = message.split("\\|");
+/*
         if (messageParts[0].equals("OrderCreated")) {
             String uid = messageParts[1];
             repository.existsById(new ObjectId(uid)).flatMap(exists -> {
@@ -38,9 +38,9 @@ public class OrchestratorListener {
 
 
 */
-            String uid = message;
+            String uid = messageParts[1];
             repository.existsById(new ObjectId(uid)).flatMap(exists -> {
-                kafkaTemplate.send(userResponseTopic, (exists ? "UserExists" : "UserNotExists"));
+                kafkaTemplate.send(userResponseTopic, (exists ? "UserExists|" : "UserNotExists|") + message);
                 return Mono.just(exists);
             }).subscribe();
 

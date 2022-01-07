@@ -1,4 +1,4 @@
-package com.unict.dieei.psd.springexample.userservice.configuration;
+package com.unict.hotelservice.configuration;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -40,5 +40,4 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-
-}
+  }

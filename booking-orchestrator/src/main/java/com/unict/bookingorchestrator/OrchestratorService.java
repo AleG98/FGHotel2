@@ -35,8 +35,14 @@ public class OrchestratorService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Value(value = "${KAFKA_MAIN_TOPIC}")
+    private String mainTopic;
+
     @Value(value = "${KAFKA_USER_REQUEST_TOPIC}")
     private String userRequestTopic;
+
+    @Value(value = "${KAFKA_HOTEL_REQUEST_TOPIC}")
+    private String hotelRequestTopic;
 
 
     //private BookingService bookingService;
@@ -54,14 +60,14 @@ public class OrchestratorService {
 
 
         //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);
-        String[] prenotazioneParts = prenotazione.split("\\|");
+        //String[] prenotazioneParts = prenotazione.split("\\|");
 
 
         System.out.println("Messaggio arrivato: " + prenotazione);
 
         //String id = "61d70a91d6018000093d5cb2";
         //kafkaTemplate.send(userRequestTopic, "61d70a91d6018000093d5cb2");
-        kafkaTemplate.send(userRequestTopic, prenotazioneParts[1]);
+        kafkaTemplate.send(userRequestTopic, prenotazione);
 
 
 
@@ -100,7 +106,15 @@ public class OrchestratorService {
 
     @KafkaListener(topics="${KAFKA_USER_RESPONSE_TOPIC}")
     public void userResponseListen(String message) {
+
+        String[] messageParts = message.split("\\|");
         System.out.println("Received message dall'user response topic:" + message);
+        if (messageParts[0].equals("UserExists")) {
+            kafkaTemplate.send(hotelRequestTopic, message);
+        } else if (messageParts[0].equals("UserNotExists")) {
+            kafkaTemplate.send(mainTopic,  "UserNotExists|" + messageParts[7]);
+        }
+
     }
 
     private void handleCustomerNotFound() {
