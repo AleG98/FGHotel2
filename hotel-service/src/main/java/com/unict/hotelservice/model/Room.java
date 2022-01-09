@@ -25,6 +25,10 @@ public class Room {
         prenotazioni.add(prenotazione);
     }
 
+    public Room(String numero) {
+        this.numero = numero;
+    }
+
     public String getNumero() {
         return numero;
     }

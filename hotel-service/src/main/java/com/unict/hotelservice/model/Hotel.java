@@ -20,7 +20,9 @@ public class Hotel {
     private ObjectId _id;
     //@Id
     //private ObjectId idHotel;
+    private String nome;
     private List<Room> stanze = new ArrayList<>();
+
 
     @PersistenceConstructor
     public Hotel(ObjectId _id, List<Room> stanze) {
@@ -29,12 +31,21 @@ public class Hotel {
         this.stanze = stanze;
     }
 
-    @JsonCreator
+
     public Hotel(String room, String data_inizio, String data_fine, String hotelId) {
         this._id = new ObjectId(hotelId);
         //this.idHotel = new ObjectId(hotelId);
         Room stanza = new Room(room,data_inizio,data_fine);
         stanze.add(stanza);
+    }
+
+    @JsonCreator
+    public Hotel(String nome, String stanze) {
+        System.out.println("N stanze: " + stanze);
+        int n = Integer.parseInt(stanze);
+        this.nome = nome;
+        for (int i = 1; i <= n; i++ )
+            this.stanze.add(new Room(String.valueOf(i)));
     }
 
     public List<Room> getStanze() {

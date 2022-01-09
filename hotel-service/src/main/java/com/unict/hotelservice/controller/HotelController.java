@@ -4,8 +4,11 @@ import com.unict.hotelservice.model.Hotel;
 import com.unict.hotelservice.repository.ReactiveHotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class HotelController {
@@ -15,6 +18,11 @@ public class HotelController {
     @GetMapping("/")
     public Flux<Hotel> getHotels() {
         return repository.findAll();
+    }
+
+    @PostMapping(path="/", consumes={"application/JSON"}, produces="application/json")
+    public Mono<Hotel> createHotel(@RequestBody Hotel h) {
+        return repository.save(h);
     }
 
 }
