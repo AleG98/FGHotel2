@@ -55,19 +55,20 @@ public class OrchestratorService {
 
     @KafkaListener(topics="${KAFKA_MAIN_TOPIC}")
     public Mono<String> bookingRoom (String prenotazione){
-
-        System.out.println("All'interno di booking room, prima degli step");
-
-
-        //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);
-        //String[] prenotazioneParts = prenotazione.split("\\|");
+        String[] messageParts = prenotazione.split("\\|");
+        if (messageParts[0].equals("BookingCreated")) {
+            System.out.println("All'interno di booking room, prima degli step");
 
 
-        System.out.println("Messaggio arrivato: " + prenotazione);
+            //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);
+            //String[] prenotazioneParts = prenotazione.split("\\|");
 
-        //String id = "61d70a91d6018000093d5cb2";
-        //kafkaTemplate.send(userRequestTopic, "61d70a91d6018000093d5cb2");
-        kafkaTemplate.send(userRequestTopic, prenotazione);
+
+            System.out.println("Messaggio arrivato: " + prenotazione);
+
+            //String id = "61d70a91d6018000093d5cb2";
+            //kafkaTemplate.send(userRequestTopic, "61d70a91d6018000093d5cb2");
+            kafkaTemplate.send(userRequestTopic, prenotazione);
 
 
 
@@ -100,8 +101,9 @@ public class OrchestratorService {
                 .onErrorResume(ex -> this.revertOrder(orderWorkflow, prenotazione));
 */
 
-        System.out.println("All'interno di booking room, alla fine degli step");
-    return Mono.just("ciao");
+            System.out.println("All'interno di booking room, alla fine degli step");
+        } //fine parentesi dell'if di booking created
+            return Mono.just("ciao");
     }
 
     @KafkaListener(topics="${KAFKA_USER_RESPONSE_TOPIC}")
@@ -115,6 +117,12 @@ public class OrchestratorService {
             kafkaTemplate.send(mainTopic,  "UserNotExists|" + messageParts[7]);
         }
 
+    }
+
+    @KafkaListener(topics="${KAFKA_HOTEL_RESPONSE_TOPIC}")
+    public void hotelResponseListen(String message) {
+        System.out.println("Received message dall'hotel response topic:" + message);
+        kafkaTemplate.send(mainTopic,message);
     }
 
     private void handleCustomerNotFound() {

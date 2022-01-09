@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.Date;
-
+@Document
 public class Booking{
     @Id
     private ObjectId _id;
@@ -42,6 +44,18 @@ public class Booking{
         this.bookingStatus= BookingStatus.PENDING;
         System.out.println("Booking creato da costruttore");
     }
+
+    @PersistenceConstructor
+    public Booking(ObjectId _id, ObjectId idHotel, String room, LocalDate datebegin, LocalDate dateend, ObjectId userId, BookingStatus bookingStatus) {
+        this._id = _id;
+        this.idHotel = idHotel;
+        this.room = room;
+        this.datebegin = datebegin;
+        this.dateend = dateend;
+        this.userId = userId;
+        this.bookingStatus = bookingStatus;
+    }
+
     public Booking(Object idHotel, Object roomId) {
 
     }

@@ -81,6 +81,14 @@ public class OrchestratorListener {
         System.out.println("Stanza esistente: " + exists);
         System.out.println("Prenotazione possibile: " + prenotazione_possibile);
 
+        if (exists && prenotazione_possibile) {
+            kafkaTemplate.send(hotelResponseTopic, "RoomReserved|" + messageParts[7]);
+        } else if (exists == false) {
+            kafkaTemplate.send(hotelResponseTopic, "RoomNotExists|" + messageParts[7]);
+        } else if (prenotazione_possibile == false) {
+            kafkaTemplate.send(hotelResponseTopic, "RoomNotAvailable|" + messageParts[7]);
+        }
+
 
 
 /*
