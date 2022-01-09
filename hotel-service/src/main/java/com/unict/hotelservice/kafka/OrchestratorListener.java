@@ -10,6 +10,7 @@ import com.unict.hotelservice.model.Hotel;
 import com.unict.hotelservice.model.Prenotazione;
 import com.unict.hotelservice.model.Room;
 import com.unict.hotelservice.repository.ReactiveHotelRepository;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
 
 import java.time.LocalDate;
 
@@ -55,17 +57,17 @@ public class OrchestratorListener {
         query.addCriteria(Criteria.where("_id").is(id));
         Hotel hotel_temp = mongoTemplate.findOne(query, Hotel.class);
 
-        LocalDate inizio = LocalDate.parse(messageParts[5]);
-        LocalDate fine = LocalDate.parse(messageParts[6]);
-
+        LocalDate inizio = LocalDate.parse(messageParts[4]);
+        LocalDate fine = LocalDate.parse(messageParts[5]);
+        Boolean overlap = false;
         boolean exists = false;
-        boolean prenotazione_possibile = false;
+        boolean prenotazione_possibile = true;
         for (Room it : hotel_temp.getStanze()) {
             if (it.getNumero().equals(messageParts[3])){
                 for (Prenotazione it_p : it.getPrenotazioni()) {
-                    if (fine.isBefore(it_p.getData_inizio()) || inizio.isAfter(it_p.getData_fine())) {
-                        prenotazione_possibile = true;
-                    }
+                    overlap = isoverlapping(it_p.getData_inizio(),it_p.getData_fine(), inizio,fine);
+                    System.out.println("Si overlappa? Risulato: " + overlap);
+                    if (overlap) {prenotazione_possibile = false; break;}
                 }
                 if (prenotazione_possibile) {
                     it.getPrenotazioni().add(new Prenotazione(LocalDate.parse(messageParts[4]), LocalDate.parse(messageParts[5])));
@@ -125,25 +127,6 @@ public class OrchestratorListener {
 
 /*
 
- public boolean isPrenotazionePossibile(int codVeicolo, Date inizio, Date fine) {
-        boolean esito = true;
-        Noleggio n;
-        for(int i=0; i<numNoleggi; i++) {
-            //si procura la prenotazione i-sima
-            n = noleggi[i];
-            //se essa riguarda il veicolo in oggetto
-            if(n.getCodVeicolo() == codVeicolo) {
-                //ipotizza la prenotazione non possibile
-                esito = false;
-                //verifica la compatibilità dei periodi
-                if(fine.before(n.getDataInizio()) || inizio.after(n.getDataFine()))
-                    esito = true;
-                else
-                    break;
-            }
-        }
-        return esito;
-    }
 
             String uid = messageParts[1];
             repository.existsById(new ObjectId(uid)).flatMap(exists -> {
@@ -153,5 +136,12 @@ public class OrchestratorListener {
 
  */
         }
+
+    public boolean isoverlapping(LocalDate A, LocalDate B, LocalDate C, LocalDate D) {
+        if ( (C.isBefore(A) && D.isBefore(A)) || (C.isAfter(B) && D.isAfter(B))  ) {
+            return false;
+        }
+        return true;
+    }
 
     }
