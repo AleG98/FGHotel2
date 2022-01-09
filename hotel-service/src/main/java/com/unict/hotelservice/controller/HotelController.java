@@ -11,10 +11,10 @@ import reactor.core.publisher.Flux;
 public class HotelController {
     @Autowired
     ReactiveHotelRepository repository;
-/*
+
     @GetMapping("/")
-    public Flux<Hotel> getUsers() {
+    public Flux<Hotel> getHotels() {
         return repository.findAll();
     }
-*/
+
 }

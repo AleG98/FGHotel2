@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -16,22 +17,35 @@ import java.util.List;
 public class Hotel {
 
     //@Id
-    //private ObjectId _id;
-    @Id
-    private ObjectId idHotel;
+    private ObjectId _id;
+    //@Id
+    //private ObjectId idHotel;
     private List<Room> stanze = new ArrayList<>();
+
+    @PersistenceConstructor
+    public Hotel(ObjectId _id, List<Room> stanze) {
+        //this.idHotel = idHotel;
+        this._id = _id;
+        this.stanze = stanze;
+    }
 
     @JsonCreator
     public Hotel(String room, String data_inizio, String data_fine, String hotelId) {
-        this.idHotel = new ObjectId(hotelId);
+        this._id = new ObjectId(hotelId);
+        //this.idHotel = new ObjectId(hotelId);
         Room stanza = new Room(room,data_inizio,data_fine);
         stanze.add(stanza);
     }
 
-
-    public String get_id_string() {
-        return idHotel.toHexString();
+    public List<Room> getStanze() {
+        return stanze;
     }
+
+    public void setStanze(List<Room> stanze) {
+        this.stanze = stanze;
+    }
+
+    public String get_id_string() { return _id.toHexString(); }
 
     /*
     public boolean isPrenotazionePossibile(int codVeicolo, Date inizio, Date fine) {

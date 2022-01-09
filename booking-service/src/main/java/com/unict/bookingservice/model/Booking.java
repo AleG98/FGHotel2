@@ -36,8 +36,8 @@ public class Booking{
         this.bookingStatus= BookingStatus.PENDING;
         this.idHotel = new ObjectId(idHotel);
         this.room =  room;
-        this.datebegin= LocalDate.now(); //aggiustare
-        this.dateend= LocalDate.now();
+        this.datebegin= LocalDate.parse(datebegin);
+        this.dateend= LocalDate.parse(dateend);
         this.userId =  new ObjectId(userId);
         this.bookingStatus= BookingStatus.PENDING;
         System.out.println("Booking creato da costruttore");
