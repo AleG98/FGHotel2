@@ -70,7 +70,7 @@ public class OrchestratorListener {
                     if (overlap) {prenotazione_possibile = false; break;}
                 }
                 if (prenotazione_possibile) {
-                    it.getPrenotazioni().add(new Prenotazione(LocalDate.parse(messageParts[4]), LocalDate.parse(messageParts[5])));
+                    it.getPrenotazioni().add(new Prenotazione(LocalDate.parse(messageParts[4]), LocalDate.parse(messageParts[5]),new ObjectId(messageParts[2])));
                 }
                 exists = true;
             }

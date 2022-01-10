@@ -55,7 +55,7 @@ public class Hotel {
     public void setStanze(List<Room> stanze) {
         this.stanze = stanze;
     }
-
+    @JsonGetter("_id")
     public String get_id_string() { return _id.toHexString(); }
 
     /*
