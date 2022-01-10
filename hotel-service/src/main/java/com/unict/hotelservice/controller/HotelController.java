@@ -25,4 +25,21 @@ public class HotelController {
         return repository.save(h);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Hotel> getHotel(@PathVariable("id") String id) {
+        Hotel o = repository.findById(new ObjectId(id)).block();
+        if (o == null) {
+            return new ResponseEntity<>(o, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(o, HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteHotel(@PathVariable("id") String id) {
+        Boolean ret = repository.existsById(new ObjectId(id)).block();
+        if (ret) {
+            repository.deleteById(new ObjectId(id)).subscribe();
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
 }
