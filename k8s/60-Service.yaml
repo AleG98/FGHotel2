@@ -10,3 +10,5 @@ spec:
   ports:
     - port: 8080
       name: hello-svc-port
+      targetPort: hello-port
+  type: ClusterIP

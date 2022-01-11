@@ -2,6 +2,9 @@ package com.unict.bookingservice.controller;
 
 import com.unict.bookingservice.model.Booking;
 import com.unict.bookingservice.repository.ReactiveBookingRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,15 +24,13 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class BookingController {
 
-    @Resource
-    private CustomCounter customCounter;
+
 
     //static final Counter requests = Counter.build()
     //        .name("requests_booking").help("Total number of requests.").register();
 
-
    //private MeterRegistry meterRegistry;
-   //final Counter prova= meterRegistry.counter("order.created");
+   final Counter prova= Metrics.counter("order.created");
 
 
     @Autowired
@@ -84,9 +85,9 @@ public class BookingController {
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         //meterRegistry.counter("prova").increment();
-        //prova.increment();
+        prova.increment();
         //requests.increment();
-        customCounter.incrementCounter();
+        //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
             kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
             return Mono.just(o);

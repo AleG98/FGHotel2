@@ -10,16 +10,18 @@ spec:
     metadata:
       labels:
         app: booking-service
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus"
+      #annotations:
+       # prometheus.io/scrape: "true"
+        #prometheus.io/port: "8080"
+        #prometheus.io/path: "/actuator/metrics"
     spec:
       containers:
         - name: booking-service
           image: booking-service:v1
           ports:
             - containerPort: 8080
+              name: hello-port
+              protocol: TCP
           envFrom:
             - configMapRef:
                 name: booking-service-db-env-file
