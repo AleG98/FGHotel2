@@ -45,12 +45,12 @@ public class BookingController {
     @Value(value="${KAFKA_MAIN_TOPIC}")
     private String maintopic;
 
-    @GetMapping("/")
+    @GetMapping("/ricerca")
     public Flux<Booking> getBooking() {
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/ricerca/{id}")
     public ResponseEntity<Booking> getBooking(@PathVariable("id") String id) {
         Booking o = repository.findById(new ObjectId(id)).block();
         if (o == null) {
