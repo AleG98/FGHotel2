@@ -48,6 +48,7 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteBooking(@PathVariable("id") String id) {
         Boolean ret = repository.existsById(new ObjectId(id)).block();
+
         if (ret) {
             repository.deleteById(new ObjectId(id)).subscribe();
             return new ResponseEntity<>(true, HttpStatus.OK);
