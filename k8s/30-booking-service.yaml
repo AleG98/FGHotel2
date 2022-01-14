@@ -31,4 +31,5 @@ spec:
     - protocol: TCP
       name: http-traffic
       port: 8080
-      targetPort: 8080
+      targetPort: "monitor"
+  type: ClusterIP

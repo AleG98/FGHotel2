@@ -35,7 +35,7 @@ public class OrchestratorService {
 
 
     //private DomainEventPublisher domainEventPublisher;
-    final Counter prova= Metrics.counter("metrica_orchestrator.created");
+    final Counter prova= Metrics.counter("orchestrator.created");
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 

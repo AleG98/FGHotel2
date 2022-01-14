@@ -20,7 +20,7 @@ spec:
           image: booking-service:v1
           ports:
             - containerPort: 8080
-              name: hello-port
+              name: "monitor"
               protocol: TCP
           envFrom:
             - configMapRef:

@@ -14,7 +14,7 @@ spec:
   endpoints:
     - interval: 15s
       path: '/actuator/metrics'
-      port: hello-svc-port
+      port: http-traffic
       scheme: http
   namespaceSelector:
     matchNames:
@@ -36,7 +36,7 @@ spec:
   endpoints:
     - interval: 15s
       path: '/actuator/metrics'
-      port: hello-svc-port2
+      port: http-traffic-orchestrator
       scheme: http
   namespaceSelector:
     matchNames:

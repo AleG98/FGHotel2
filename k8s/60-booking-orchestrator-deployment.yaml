@@ -15,7 +15,9 @@ spec:
         - name: booking-orchestrator
           image: booking-orchestrator:v1
           ports:
-            - containerPort: 8080
+            - containerPort: 11000
+              name: "monitor-orch"
+              protocol: TCP
           envFrom:
             - configMapRef:
                 name: booking-orchestrator-env-file
