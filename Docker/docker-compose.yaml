@@ -33,6 +33,30 @@ services:
       - "8000:8080"
     volumes:
       - ../booking-orchestrator/:/code
+  booking-service:
+    #    <<: *common-settings
+    build:
+      context: ./booking-service
+      dockerfile: ./Dockerfile
+    environment:
+      #restart: on-failure
+      KAFKA_ADDRESS: kafka:9092
+      KAFKA_GROUP_ID: booking-service-group
+      KAFKA_MAIN_TOPIC: main-topic
+      MONGODB_HOSTNAME: booking-service-db
+      MONGODB_PORT: "27017"
+      MONGO_AUTH_DB: admin
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    depends_on:
+      - zookeeper
+      - kafka
+      - booking-service-db
+    ports:
+      - "8001:8080"
+    volumes:
+      - ../booking-service/:/code
 
   user-service:
     #    <<: *common-settings
@@ -59,9 +83,34 @@ services:
       - kafka
       - user-service-db
     ports:
-      - "8081:8080"
+      - "8002:8080"
     volumes:
       - ../user-service/:/code
+  hotel-service:
+    #    <<: *common-settings
+    build:
+      context: ./hotel-service
+      dockerfile: ./Dockerfile
+    environment:
+      #restart: on-failure
+      KAFKA_ADDRESS: kafka:9092
+      KAFKA_GROUP_ID: hotel-service-group
+      KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
+      KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
+      MONGODB_HOSTNAME: hotel-service-db
+      MONGODB_PORT: "27017"
+      MONGO_AUTH_DB: admin
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    depends_on:
+      - zookeeper
+      - kafka
+      - hotel-service-db
+    ports:
+      - "8003:8080"
+    volumes:
+      - ../hotel-service/:/code
 
   user-service-db:
      # <<: *common-settings
@@ -73,6 +122,26 @@ services:
         - "27017:27017"
       volumes:
        - mongo-db-data-user-service:/data/db
+  booking-service-db:
+    # <<: *common-settings
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db-data-booking-service:/data/db
+  hotel-service-db:
+    # <<: *common-settings
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db-data-hotel-service:/data/db
 
 #  mongo:
 #    <<: *common-settings
@@ -121,3 +190,5 @@ services:
 
 volumes:
   mongo-db-data-user-service:
+  mongo-db-data-booking-service:
+  mongo-db-data-hotel-service:
