@@ -10,6 +10,8 @@ import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
 import static io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send;
 */
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,6 +21,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 
@@ -27,11 +30,12 @@ import reactor.core.publisher.Mono;
 public class OrchestratorService implements SimpleSaga<String> {
 */
 @Service
+@RestController
 public class OrchestratorService {
 
 
     //private DomainEventPublisher domainEventPublisher;
-
+    final Counter prova= Metrics.counter("metrica_orchestrator.created");
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
@@ -58,6 +62,7 @@ public class OrchestratorService {
         String[] messageParts = prenotazione.split("\\|");
         if (messageParts[0].equals("BookingCreated")) {
             System.out.println("All'interno di booking room, prima degli step");
+            prova.increment();
 
 
             //Workflow bookingWorkflow = this.getBookingWorkflow(prenotazione);

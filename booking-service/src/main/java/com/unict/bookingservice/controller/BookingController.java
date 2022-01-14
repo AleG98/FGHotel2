@@ -30,7 +30,7 @@ public class BookingController {
     //        .name("requests_booking").help("Total number of requests.").register();
 
    //private MeterRegistry meterRegistry;
-   final Counter prova= Metrics.counter("order.created");
+   final Counter prova= Metrics.counter("booking.created");
 
 
     @Autowired

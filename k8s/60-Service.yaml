@@ -12,3 +12,18 @@ spec:
       name: hello-svc-port
       targetPort: hello-port
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking-orchestrator
+  labels:
+    app: booking-orchestrator
+spec:
+  selector:
+    app: booking-service
+  ports:
+    - port: 8080
+      name: hello-svc-port2
+      targetPort: hello-port2
+  type: ClusterIP

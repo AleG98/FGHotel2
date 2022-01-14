@@ -19,4 +19,26 @@ spec:
   namespaceSelector:
     matchNames:
       - default
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: booking-orchestrator
+  namespace: monitoring
+  labels:
+    app: booking-orchestrator
+    release: prometheus # imp had forgot this, if we describe prometheus resource there is a servicemonitor selector for this label
+spec:
+  selector:
+    matchLabels:
+      # Target app service
+      app: booking-orchestrator
+  endpoints:
+    - interval: 15s
+      path: '/actuator/metrics'
+      port: hello-svc-port2
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - default
 
