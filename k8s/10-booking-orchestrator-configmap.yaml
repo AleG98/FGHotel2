@@ -7,8 +7,6 @@ data:
   KAFKA_USER_RESPONSE_TOPIC: user-response-topic
   KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
   KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
-  MONGODB_HOSTNAME: booking-orchestrator-db
-  MONGODB_PORT: "27017"
 kind: ConfigMap
 metadata:
   name: booking-orchestrator-env-file
