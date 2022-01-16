@@ -29,8 +29,9 @@ import reactor.core.publisher.Mono;
 @Service
 public class OrchestratorService implements SimpleSaga<String> {
 */
+
+//@RestController
 @Service
-@RestController
 public class OrchestratorService {
 
 

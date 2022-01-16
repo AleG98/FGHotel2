@@ -30,7 +30,8 @@ public class BookingController {
     //        .name("requests_booking").help("Total number of requests.").register();
 
    //private MeterRegistry meterRegistry;
-   final Counter prova= Metrics.counter("booking.created");
+   final Counter richieste = Metrics.counter("booking.request");
+   final Counter http = Metrics.counter(("Http.request"));
 
 
     @Autowired
@@ -47,11 +48,13 @@ public class BookingController {
 
     @GetMapping("/ricerca")
     public Flux<Booking> getBooking() {
+        http.increment();
         return repository.findAll();
     }
 
     @GetMapping("/ricerca/{id}")
     public ResponseEntity<Booking> getBooking(@PathVariable("id") String id) {
+        http.increment();
         Booking o = repository.findById(new ObjectId(id)).block();
         if (o == null) {
             return new ResponseEntity<>(o, HttpStatus.NOT_FOUND);
@@ -59,12 +62,15 @@ public class BookingController {
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    //@DeleteMapping("/{id}")
+    //@RequestMapping(value="/cancella/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteBooking(@PathVariable("id") String id) {
+        http.increment();
         Boolean ret = repository.existsById(new ObjectId(id)).block();
 
         if (ret) {
             repository.deleteById(new ObjectId(id)).subscribe();
+            kafkaTemplate.send(maintopic,"BookingToDelete|" + id);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
@@ -72,6 +78,7 @@ public class BookingController {
 
     @PutMapping(path="/{id}", consumes={"application/JSON"}, produces="application/json")
     public ResponseEntity<Mono<Booking>> editBooking(@PathVariable("id") String id, @RequestBody Booking o) {
+        http.increment();
         ObjectId oid = new ObjectId(id);
         Booking old = repository.findById(oid).block();
         if (old == null)
@@ -85,7 +92,8 @@ public class BookingController {
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         //meterRegistry.counter("prova").increment();
-        prova.increment();
+        http.increment();
+        richieste.increment();
         //requests.increment();
         //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
@@ -99,6 +107,7 @@ public class BookingController {
 
     @GetMapping(path="/{id}/exists")
     public Mono<Boolean> exists(@PathVariable("id") String id) {
+        http.increment();
         ObjectId oid = new ObjectId(id);
         return repository.existsById(oid);
     }

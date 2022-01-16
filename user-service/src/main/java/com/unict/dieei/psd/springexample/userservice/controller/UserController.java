@@ -19,8 +19,9 @@ public class UserController {
     @Autowired
     ReactiveUserRepository repository;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public Flux<User> getUsers() {
+        System.out.println("dentro all");
         return repository.findAll();
     }
 
@@ -40,11 +41,13 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{id}")
+    //@DeleteMapping("/{id}")
+    @GetMapping(path="/cancella/{id}")
     public @ResponseBody ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
-
+        System.out.println("dentro cancella con id: " + id);
         boolean exists = exists(id).getBody().block();
         if (exists) {
+            System.out.println("dentro exist");
             repository.deleteById(new ObjectId(id)).subscribe();
         } else
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);

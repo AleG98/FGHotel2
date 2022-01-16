@@ -2,6 +2,7 @@ apiVersion: v1
 data:
   KAFKA_ADDRESS: kafkaa:9092
   KAFKA_GROUP_ID: hotel-service-group
+  KAFKA_MAIN_TOPIC: main-topic
   KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
   KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
   MONGODB_HOSTNAME: hotel-service-db

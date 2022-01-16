@@ -4,7 +4,7 @@ metadata:
   name: booking-orchestrator
 spec:
   ports:
-  - port: 11000
+  - port: 8080
   selector:
     app: booking-orchestrator
 ---
@@ -20,6 +20,6 @@ spec:
   ports:
     - protocol: TCP
       name: http-traffic-orchestrator
-      port: 11000
-      targetPort: "monitor-orch"
+      port: 8080
+      targetPort: "orch"
   type: ClusterIP

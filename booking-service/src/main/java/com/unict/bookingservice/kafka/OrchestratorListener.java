@@ -5,6 +5,8 @@ import com.mongodb.client.MongoClients;
 import com.unict.bookingservice.model.Booking;
 import com.unict.bookingservice.model.BookingStatus;
 import com.unict.bookingservice.repository.ReactiveBookingRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,9 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class OrchestratorListener {
+
+    final Counter confermati = Metrics.counter("booking.confirmed");
+    final Counter cancellati = Metrics.counter("booking.deleted");
 
     @Autowired
     ReactiveBookingRepository repository;
@@ -40,25 +45,28 @@ public class OrchestratorListener {
         if (messageParts[0].equals("RoomReserved")) {
             String oid = messageParts[1];
             setBookingStatus(message, oid, BookingStatus.CONFIRMED, "BookingConfirmed|");
+            confermati.increment();
         }
         if (messageParts[0].equals("UserNotExists")) {
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("L'utente non esiste, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
+            cancellati.increment();
         }
         if (messageParts[0].equals("RoomNotExists")) {
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non esiste, setto lo status di booking con id: "+ oid + " a deleted");
-
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
+            cancellati.increment();
         }
         if (messageParts[0].equals("RoomNotAvailable")) {
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non e' disponibile, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
+            cancellati.increment();
         }
 
     }
