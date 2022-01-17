@@ -15,5 +15,7 @@ metadata:
 spec:
   ports:
   - port: 8080
+    protocol: TCP
+    name: http
   selector:
     app: user-service

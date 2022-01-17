@@ -62,7 +62,7 @@ public class BookingController {
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
 
-    //@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     //@RequestMapping(value="/cancella/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteBooking(@PathVariable("id") String id) {
         http.increment();

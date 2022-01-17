@@ -19,13 +19,13 @@ public class UserController {
     @Autowired
     ReactiveUserRepository repository;
 
-    @GetMapping("/all")
+    @GetMapping(path="/ricerca")
     public Flux<User> getUsers() {
-        System.out.println("dentro all");
+        System.out.println("dentro all 4");
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/ricerca/{id}")
     public ResponseEntity<Mono<User>> getUser(@PathVariable("id") String id) {
         Mono<User> u = repository.findById(new ObjectId(id));
         if (u == null) {
@@ -35,15 +35,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}/exists")
-    public @ResponseBody ResponseEntity<Mono<Boolean>> exists(@PathVariable("id") String id) {
+    public @ResponseBody
+    ResponseEntity<Mono<Boolean>> exists(@PathVariable("id") String id) {
         Mono<Boolean> ret = repository.existsById(new ObjectId(id));
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
 
-    //@DeleteMapping("/{id}")
-    @GetMapping(path="/cancella/{id}")
-    public @ResponseBody ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
+    @DeleteMapping("/{id}")
+    public @ResponseBody
+    ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
         System.out.println("dentro cancella con id: " + id);
         boolean exists = exists(id).getBody().block();
         if (exists) {
