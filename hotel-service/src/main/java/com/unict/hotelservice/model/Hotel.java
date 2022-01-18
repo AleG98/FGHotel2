@@ -58,6 +58,10 @@ public class Hotel {
     @JsonGetter("_id")
     public String get_id_string() { return _id.toHexString(); }
 
+    public String getNome() {
+        return nome;
+    }
+
     /*
     public boolean isPrenotazionePossibile(int codVeicolo, Date inizio, Date fine) {
         boolean esito = true;

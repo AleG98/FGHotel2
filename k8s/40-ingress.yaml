@@ -29,8 +29,8 @@ spec:
             name: booking-service
             port:
               number: 8080
-      - path: /hotel
-        pathType: ImplementationSpecific
+      - path: /hotel(/|$)(.*)
+        pathType: Prefix
         backend:
           service:
             name: hotel-service

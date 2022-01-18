@@ -1,5 +1,6 @@
 package com.unict.hotelservice.controller;
 
+import com.unict.hotelservice.kafka.BookingListener;
 import com.unict.hotelservice.model.Hotel;
 import com.unict.hotelservice.repository.ReactiveHotelRepository;
 import org.bson.types.ObjectId;
@@ -42,5 +43,12 @@ public class HotelController {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/prova/{id}")
+    public ResponseEntity<Boolean> provaHotel(@PathVariable("id") String id) {
+        BookingListener b = new BookingListener();
+        b.listen("BookingToDelete|" + id);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

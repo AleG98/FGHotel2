@@ -4,6 +4,7 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.bson.types.ObjectId;
 import java.time.LocalDate;
+
 @Document
 public class Prenotazione {
     ObjectId bookingId;
