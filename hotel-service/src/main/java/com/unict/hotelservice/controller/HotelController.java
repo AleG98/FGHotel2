@@ -31,7 +31,7 @@ public class HotelController {
         if (o == null) {
             return new ResponseEntity<>(o, HttpStatus.NOT_FOUND);
         }
-        System.out.println("ciao");
+
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
