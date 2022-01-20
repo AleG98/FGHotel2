@@ -1,12 +1,12 @@
 # FGHotel2
 Il progetto prevede un sistema di prenotazione di stanze all'interno di hotel.
 L'utente prima di effettuare una qualsiasi prenotazione deve procedere con la registrazione, inserendo informazioni personali quali:
--nome
 - nome
 - cognome
 - indirizzo
 - n_telefono
 
+La comunicazione tra i microservizi avviene sfruttando Kafka
 Il microservizio responsabile della registrazione utente è lo user-service, che inserisce le informazioni all'interno del proprio database assegnandogli un identificativo.
 Altro microservizio è l'hotel service, responsabile della gestione degli hotel.
 Il microservizio si occupa di inserire nuovi hotel all'interno del proprio database con il rispettivo nome e numero di stanze. Per ogni stanza, all'atto della prenotazione, verrà verificato lo stato della stanza per la data richiesta.
