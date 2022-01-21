@@ -92,6 +92,9 @@ public class BookingController {
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         //meterRegistry.counter("prova").increment();
+        System.out.println("RICEVUTA REQUEST");
+        RequestHTTPTimer timer = RequestHTTPTimer.getInstance();
+        timer.start(o.get_Id_string());
         http.increment();
         richieste.increment();
         //requests.increment();
