@@ -17,6 +17,9 @@ public class KafkaTopicConfig {
     @Value(value = "${KAFKA_ADDRESS}")
     private String bootstrapAddress;
 
+    @Value(value = "${KAFKA_MAIN_TOPIC}")
+    private String kafkaMainTopic;
+
     @Value(value = "${KAFKA_HOTEL_REQUEST_TOPIC}")
     private String hotelRequestTopic;
 
@@ -30,6 +33,11 @@ public class KafkaTopicConfig {
         Map<String, Object> configs = new HashMap<>();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         return new KafkaAdmin(configs);
+    }
+
+    @Bean
+    public NewTopic topic1() {
+        return new NewTopic(kafkaMainTopic, 100, (short) 1);
     }
 
     @Bean

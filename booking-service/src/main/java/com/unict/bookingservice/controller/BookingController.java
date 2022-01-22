@@ -3,7 +3,6 @@ package com.unict.bookingservice.controller;
 import com.unict.bookingservice.model.Booking;
 import com.unict.bookingservice.repository.ReactiveBookingRepository;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Metrics;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +11,11 @@ import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
-import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static java.lang.Math.round;
 
 @RestController
 public class BookingController {
@@ -108,9 +100,9 @@ public class BookingController {
         //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
             kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
-            Instant end = Instant.now();
-            Duration timeElapsed = Duration.between(start, end);
-            System.out.println("\n\nTempo response: "+ round(timeElapsed.getNano()/1000000) + "ms\n\n");
+            //Instant end = Instant.now();
+            //Duration timeElapsed = Duration.between(start, end);
+            //System.out.println("\n\nTempo response: "+ round(timeElapsed.getNano()/1000000) + "ms\n\n");
             return Mono.just(o);
         });
 

@@ -4,28 +4,32 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.bson.types.ObjectId;
 import java.time.LocalDate;
+
 @Document
 public class Prenotazione {
-    ObjectId idUtente;
+    ObjectId bookingId;
     LocalDate data_inizio;
     LocalDate data_fine;
 
     @PersistenceConstructor
-    public Prenotazione(LocalDate data_inizio, LocalDate data_fine, ObjectId idUtente) {
+    public Prenotazione(LocalDate data_inizio, LocalDate data_fine, ObjectId bookingId) {
         this.data_inizio = data_inizio;
         this.data_fine = data_fine;
-        this.idUtente=idUtente;
+        this.bookingId=bookingId;
     }
 
-    public ObjectId getIdUtente() {
-        return idUtente;
-    }
+
     public Prenotazione(LocalDate data_inizio, LocalDate data_fine) {
         this.data_inizio = data_inizio;
         this.data_fine = data_fine;
     }
-    public void setIdUtente(ObjectId idUtente) {
-        this.idUtente = idUtente;
+
+    public ObjectId getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(ObjectId bookingId) {
+        this.bookingId = bookingId;
     }
 
     public LocalDate getData_inizio() {

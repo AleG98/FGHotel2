@@ -12,7 +12,7 @@ metadata:
   namespace: default
 spec:
   rules:
-  - host: springexample.dev.loc
+  - host: fghotel.dsbd.loc
     http:
       paths:
       - path: /users(/|$)(.*)

@@ -12,15 +12,12 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
-import reactor.core.publisher.Mono;
 
 @Service
 public class OrchestratorListener {
@@ -46,34 +43,35 @@ public class OrchestratorListener {
         String[] messageParts = message.split("\\|");
 
         if (messageParts[0].equals("RoomReserved")) {
-            timer.stop();
+
             String oid = messageParts[1];
             setBookingStatus(message, oid, BookingStatus.CONFIRMED, "BookingConfirmed|");
             confermati.increment();
+            timer.stop(oid);
         }
         if (messageParts[0].equals("UserNotExists")) {
-            timer.stop();
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("L'utente non esiste, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
+            timer.stop(oid);
         }
         if (messageParts[0].equals("RoomNotExists")) {
-            timer.stop();
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non esiste, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
+            timer.stop(oid);
         }
         if (messageParts[0].equals("RoomNotAvailable")) {
-            timer.stop();
             String oid = messageParts[1];
             //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non e' disponibile, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
+            timer.stop(oid);
         }
 
     }
