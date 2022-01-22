@@ -18,8 +18,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static java.lang.Math.round;
 
 @RestController
 public class BookingController {
@@ -92,6 +96,9 @@ public class BookingController {
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
         //meterRegistry.counter("prova").increment();
+        Instant start = Instant.now();
+        // time passeed
+
         System.out.println("RICEVUTA REQUEST");
         RequestHTTPTimer timer = RequestHTTPTimer.getInstance();
         timer.start(o.get_Id_string());
@@ -101,6 +108,9 @@ public class BookingController {
         //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
             kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
+            Instant end = Instant.now();
+            Duration timeElapsed = Duration.between(start, end);
+            System.out.println("\n\nTempo response: "+ round(timeElapsed.getNano()/1000000) + "ms\n\n");
             return Mono.just(o);
         });
 
