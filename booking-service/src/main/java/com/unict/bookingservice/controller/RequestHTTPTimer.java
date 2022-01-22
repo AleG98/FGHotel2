@@ -23,18 +23,12 @@ public class RequestHTTPTimer {
     }
 
     public void start(String booking) {
-        //System.out.println("faccio partire pippo");
-        //this.start = System.currentTimeMillis();
-        //this.timer_http = Metrics.timer("pippo");
-        //this.booking = booking;
         ResponseTimer timer = new ResponseTimer(booking);
         timer.start();
         responseTimerList.add(timer);
     }
 
     public void stop(String id) {
-        //System.out.println("fermo pippo");
-        //timer_http.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         for (ResponseTimer it : responseTimerList) {
             if (it.getBooking().equals(id)){
                 it.stop();

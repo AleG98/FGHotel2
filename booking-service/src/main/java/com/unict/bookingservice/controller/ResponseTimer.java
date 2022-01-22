@@ -16,14 +16,14 @@ public class ResponseTimer {
     }
 
     public void start() {
-        System.out.println("faccio partire pippo");
+        System.out.println("faccio partire il timer");
         this.start = System.currentTimeMillis();
-        this.timer_http = Metrics.timer("pippo");
+        this.timer_http = Metrics.timer("booking.response");
         this.booking = booking;
     }
 
     public void stop() {
-        System.out.println("fermo pippo");
+        System.out.println("fermo il timer");
         timer_http.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         System.out.println("\n\n\nTempo response: "+ (System.currentTimeMillis() - start) + "ms\n\n");
     }
