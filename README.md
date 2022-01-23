@@ -30,7 +30,9 @@ I microservizi agiscono dietro INGRESS che si occupa di smistare le richieste tr
 
 Come sistema di monitoraggio è stato utilizzato PROMETHEUS per il whitebox monitoring dove le metriche analizzate sono state: 
 
-- booking creati totali
-- memoriadisponibile/memoriatotale * 100
+- booking creati totali (implementato tramite un counter che viene incrementato ogni qualvolta arriva una richiesta di prenotazione). In tale prospettiva sono stati inseriti ulteriori due counter (deleted e confirmed) che ogni qualvolta si ha l'esito del processo di prenotazione vengono incrementati.
 - container_cpu_load_average_10s
-Sono stati creati degli alert per notificare tramite mail il verificarsi di particolari condizioni, per esempio memoriadisponibile/memoriatotale * 100< 10. Immaginando una situazione in cui la memoria sta per saturarsi.
+- response time delle richieste di prenotazione (implementato tramite un timer avviato dal booking-service all'atto di ricezione della richiesta di prenotazione e stoppato quando viene ricevuta una risposta dall'orchestrator.
+
+Sono stati creati degli alert per notificare tramite mail il verificarsi di particolari condizioni, per esempio memoriadisponibile/memoriatotale * 100< 10, immaginando una situazione in cui la memoria sta per saturarsi.
+
