@@ -15,9 +15,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class OrchestratorListener {
@@ -102,8 +105,9 @@ public class OrchestratorListener {
     }
 
     */
-    private void setBookingStatus(String message, String oid, BookingStatus status, String key) {
-        String s = String.format("mongodb://%s:%s@%s:%s/", "root", "toor", "booking-service-db", "27017");
+    //private void setBookingStatus(String message, String oid, BookingStatus status, String key) {
+        private ResponseEntity<Mono<Booking>> setBookingStatus(String message, String id, BookingStatus status, String key) {
+    /*    String s = String.format("mongodb://%s:%s@%s:%s/", "root", "toor", "booking-service-db", "27017");
         MongoTemplate mongoTemplate = new MongoTemplate(MongoClients.create(s),"admin");
 
         System.out.println(status);
@@ -114,7 +118,18 @@ public class OrchestratorListener {
         Update update = new Update();
         update.set("bookingStatus",status);
 
-        mongoTemplate.findAndModify(query,update, Booking.class);
+        mongoTemplate.findAndModify(query,update, Booking.class); */
+
+            ObjectId oid = new ObjectId(id);
+            Booking old = repository.findById(oid).block();
+            //System.out.println("trovato il booking? id: " + old.get_Id_string() + "per il repository: " + repository.existsById(oid));
+            if (old == null)
+                return new ResponseEntity<>(Mono.just(new Booking(null, null)), HttpStatus.NOT_FOUND);
+
+            old.setBookingStatus(status);
+            repository.save(old).subscribe();
+            return new ResponseEntity<>(repository.save(old), HttpStatus.OK);
+
 
     }
 
