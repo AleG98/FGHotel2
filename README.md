@@ -1,4 +1,4 @@
-# FGHotel2
+# FGHotel
 # Descrizione
 Il progetto prevede un sistema di prenotazione di stanze all'interno di hotel.
 L'utente prima di effettuare una qualsiasi prenotazione deve procedere con la registrazione (user-service), inserendo informazioni personali quali:
