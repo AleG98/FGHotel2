@@ -95,7 +95,6 @@ services:
       #restart: on-failure
       KAFKA_ADDRESS: kafka:9092
       KAFKA_GROUP_ID: hotel-service-group
-      KAFKA_MAIN_TOPIC: main-topic
       KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
       KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
       MONGODB_HOSTNAME: hotel-service-db
@@ -126,7 +125,6 @@ services:
   booking-service-db:
     # <<: *common-settings
     image: mongo:latest
-    command: mongod --port 27018
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor
@@ -137,7 +135,6 @@ services:
   hotel-service-db:
     # <<: *common-settings
     image: mongo:latest
-    command: mongod --port 27019
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor

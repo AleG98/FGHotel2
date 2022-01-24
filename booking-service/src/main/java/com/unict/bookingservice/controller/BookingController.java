@@ -25,7 +25,7 @@ public class BookingController {
     //static final Counter requests = Counter.build()
     //        .name("requests_booking").help("Total number of requests.").register();
 
-   //private MeterRegistry meterRegistry;
+   private MeterRegistry meterRegistry;
    final Counter richieste = Metrics.counter("booking.request");
    final Counter http = Metrics.counter(("Http.request"));
 
