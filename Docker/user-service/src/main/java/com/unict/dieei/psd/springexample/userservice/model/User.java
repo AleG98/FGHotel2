@@ -14,14 +14,7 @@ public class User {
     private String surname;
     private String address;
     private String phoneNo;
-/*
-    @JsonCreator
-    public User(String name) {
-        this.name = name;
-        this._id = new ObjectId();
-    }
-    
- */
+
     @JsonCreator
     public User(String name, String surname, String address, String phoneNo) {
         this.name = name;

@@ -3,7 +3,6 @@ package com.unict.bookingservice.controller;
 import com.unict.bookingservice.model.Booking;
 import com.unict.bookingservice.repository.ReactiveBookingRepository;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Metrics;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +11,15 @@ import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
-import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static java.lang.Math.round;
 
 @RestController
 public class BookingController {
 
-
-
-    //static final Counter requests = Counter.build()
-    //        .name("requests_booking").help("Total number of requests.").register();
-
-   //private MeterRegistry meterRegistry;
    final Counter richieste = Metrics.counter("booking.request");
    final Counter http = Metrics.counter(("Http.request"));
 
@@ -67,7 +53,6 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    //@RequestMapping(value="/cancella/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteBooking(@PathVariable("id") String id) {
         http.increment();
         Boolean ret = repository.existsById(new ObjectId(id)).block();
@@ -95,27 +80,16 @@ public class BookingController {
 
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
-        //meterRegistry.counter("prova").increment();
-        Instant start = Instant.now();
-        // time passeed
 
         System.out.println("RICEVUTA REQUEST");
         RequestHTTPTimer timer = RequestHTTPTimer.getInstance();
         timer.start(o.get_Id_string());
         http.increment();
         richieste.increment();
-        //requests.increment();
-        //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
             kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
-            //Instant end = Instant.now();
-            //Duration timeElapsed = Duration.between(start, end);
-            //System.out.println("\n\nTempo response: "+ round(timeElapsed.getNano()/1000000) + "ms\n\n");
             return Mono.just(o);
         });
-
-        //return Mono.just(o);
-        //return o;
     }
 
     @GetMapping(path="/{id}/exists")

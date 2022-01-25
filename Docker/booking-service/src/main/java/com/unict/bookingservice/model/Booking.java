@@ -15,23 +15,12 @@ public class Booking{
     @Id
     private ObjectId _id;
     private ObjectId idHotel;
-    private String room;  //le stanze vanno da 1 a 10
+    private String room;
     private LocalDate datebegin;
     private LocalDate dateend;
     private ObjectId userId;
     private BookingStatus bookingStatus;
-/*
-    @JsonCreator
-    public Booking(ObjectId idHotel, ObjectId roomId, Date date, ObjectId userId) {
-        this._id = new ObjectId();
-        this.idHotel = idHotel;
-        this.roomId = roomId;
-        //this.date = date;
-        this.userId = userId;
-        this.bookingStatus= BookingStatus.PENDING;
-    }
 
- */
     @JsonCreator
     public Booking(String idHotel, String room, String datebegin, String dateend, String userId){
         this._id = new ObjectId();
@@ -42,7 +31,6 @@ public class Booking{
         this.dateend= LocalDate.parse(dateend);
         this.userId =  new ObjectId(userId);
         this.bookingStatus= BookingStatus.PENDING;
-        System.out.println("Booking creato da costruttore");
     }
 
     @PersistenceConstructor
@@ -107,7 +95,6 @@ public class Booking{
     public BookingStatus getBookingStatus() {
         return bookingStatus;
     }
-
 
 
     @JsonGetter("idHotel")

@@ -40,7 +40,6 @@ public class BookingListener {
             MongoTemplate mongoTemplate = new MongoTemplate(MongoClients.create(s),"admin");
             Update update = new Update().pull("hotel.stanze.prenotazioni",Collections.singletonMap("bookingId", new ObjectId(messageParts[1])));
             mongoTemplate.updateMulti(new Query(),update, Prenotazione.class);
-            System.out.println("dentro to delete");
             List<Hotel> lista = mongoTemplate.findAll(Hotel.class);
             for (Hotel ith : lista) {
                 System.out.println("itero l'hotel: " + ith.getNome());
@@ -50,7 +49,6 @@ public class BookingListener {
                     for (Prenotazione itp : itr.getPrenotazioni()) {
                         System.out.println("itero la prenotazione con: " + itp.getBookingId());
                         if(itp.getBookingId().equals(id)) {
-                            System.out.println("dentro id trovato");
                             itr.getPrenotazioni().remove(itp);
                             mongoTemplate.save(h);
                             break;
@@ -58,9 +56,6 @@ public class BookingListener {
                     }
                 }
             }
-
-
-
 
         }
 

@@ -21,7 +21,6 @@ public class UserController {
 
     @GetMapping(path="/ricerca")
     public Flux<User> getUsers() {
-        System.out.println("dentro all 4");
         return repository.findAll();
     }
 
@@ -45,10 +44,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     public @ResponseBody
     ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
-        System.out.println("dentro cancella con id: " + id);
         boolean exists = exists(id).getBody().block();
         if (exists) {
-            System.out.println("dentro exist");
             repository.deleteById(new ObjectId(id)).subscribe();
         } else
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);

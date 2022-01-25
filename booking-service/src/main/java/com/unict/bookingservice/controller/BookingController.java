@@ -20,12 +20,6 @@ import java.time.Instant;
 @RestController
 public class BookingController {
 
-
-
-    //static final Counter requests = Counter.build()
-    //        .name("requests_booking").help("Total number of requests.").register();
-
-   //private MeterRegistry meterRegistry;
    final Counter richieste = Metrics.counter("booking.request");
    final Counter http = Metrics.counter(("Http.request"));
 
@@ -59,7 +53,6 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    //@RequestMapping(value="/cancella/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteBooking(@PathVariable("id") String id) {
         http.increment();
         Boolean ret = repository.existsById(new ObjectId(id)).block();
@@ -87,27 +80,16 @@ public class BookingController {
 
     @PostMapping(path="/", consumes = "application/JSON", produces = "application/JSON")
     public Mono<Booking> newBooking(@RequestBody Booking o) {
-        //meterRegistry.counter("prova").increment();
-        Instant start = Instant.now();
-        // time passeed
 
         System.out.println("RICEVUTA REQUEST");
         RequestHTTPTimer timer = RequestHTTPTimer.getInstance();
         timer.start(o.get_Id_string());
         http.increment();
         richieste.increment();
-        //requests.increment();
-        //customCounter.incrementCounter();
         return repository.save(o).flatMap(booking -> {
             kafkaTemplate.send(maintopic, "BookingCreated|" + o.get_user_string() + "|" + o.get_room_string()+ "|" + o.get_Datebegin_string()+ "|" + o.get_Dateend_string()+ "|"+ o.get_idHotel_string()+ "|"+ o.get_Id_string());
-            //Instant end = Instant.now();
-            //Duration timeElapsed = Duration.between(start, end);
-            //System.out.println("\n\nTempo response: "+ round(timeElapsed.getNano()/1000000) + "ms\n\n");
             return Mono.just(o);
         });
-
-        //return Mono.just(o);
-        //return o;
     }
 
     @GetMapping(path="/{id}/exists")

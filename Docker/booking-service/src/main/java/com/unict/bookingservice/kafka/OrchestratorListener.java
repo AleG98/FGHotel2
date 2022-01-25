@@ -1,7 +1,6 @@
 package com.unict.bookingservice.kafka;
 
 
-import com.mongodb.client.MongoClients;
 import com.unict.bookingservice.controller.RequestHTTPTimer;
 import com.unict.bookingservice.model.Booking;
 import com.unict.bookingservice.model.BookingStatus;
@@ -11,17 +10,11 @@ import io.micrometer.core.instrument.Metrics;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.ReactiveMongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -56,7 +49,6 @@ public class OrchestratorListener {
         }
         if (messageParts[0].equals("UserNotExists")) {
             String oid = messageParts[1];
-            //ObjectId ooid = new ObjectId(oid);
             System.out.println("L'utente non esiste, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
@@ -64,7 +56,6 @@ public class OrchestratorListener {
         }
         if (messageParts[0].equals("RoomNotExists")) {
             String oid = messageParts[1];
-            //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non esiste, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
@@ -72,7 +63,6 @@ public class OrchestratorListener {
         }
         if (messageParts[0].equals("RoomNotAvailable")) {
             String oid = messageParts[1];
-            //ObjectId ooid = new ObjectId(oid);
             System.out.println("La stanza non e' disponibile, setto lo status di booking con id: "+ oid + " a deleted");
             setBookingStatus(message, oid, BookingStatus.DELETED, "BookingDeleted|");
             cancellati.increment();
@@ -80,59 +70,17 @@ public class OrchestratorListener {
         }
 
     }
-/*
-    private void setBookingStatus(String message, String oid, BookingStatus status, String key) {
 
-        System.out.println("Sono dentro setBookingStatus");
-        repository.existsById(new ObjectId(oid)).flatMap(exists -> {
-            if (exists) {
-                System.out.println("Sono dentro exists (u truvau) oid: " + oid);
+        private ResponseEntity<Mono<Booking>> setBookingStatus(String message, String id, BookingStatus status, String key) {
 
-                repository.findById(new ObjectId(oid)).flatMap(booking -> {
-                    System.out.println("Sono dentro il secondo exists");
-                    System.out.println("Stato booking prima: " + booking.getBookingStatus().toString());
-                   booking.setBookingStatus(status);
-                    System.out.println("Stato booking dopo: " + booking.getBookingStatus().toString());
-                    return repository.save(booking);
-                }).subscribe();
+            ObjectId oid = new ObjectId(id);
+            Booking old = repository.findById(oid).block();
+            if (old == null)
+                return new ResponseEntity<>(Mono.just(new Booking(null, null)), HttpStatus.NOT_FOUND);
 
-                //kafkaTemplate.send(mainTopic, key + oid);
-            } else {
-                System.out.println("Sono dentro sto else strano");
-
-                //kafkaTemplate.send(mainTopic,"BadMessage||" + message);
-            }
-            return Mono.just(exists);
-        }).subscribe();
-    }
-
-    */
-
-    //private void setBookingStatus(String message, String oid, BookingStatus status, String key) {
-    private ResponseEntity<Mono<Booking>> setBookingStatus(String message, String id, BookingStatus status, String key) {
-     /*   String s = String.format("mongodb://%s:%s@%s:%s/", "root", "toor", "booking-service-db", "27018");
-        MongoTemplate mongoTemplate = new MongoTemplate(MongoClients.create(s),"admin");
-
-        System.out.println(status);
-
-        ObjectId id = new ObjectId(oid);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(id));
-        Update update = new Update();
-        update.set("bookingStatus",status);
-
-        mongoTemplate.findAndModify(query,update, Booking.class);
-*/
-        ObjectId oid = new ObjectId(id);
-        Booking old = repository.findById(oid).block();
-        //System.out.println("trovato il booking? id: " + old.get_Id_string() + "per il repository: " + repository.existsById(oid));
-        if (old == null)
-            return new ResponseEntity<>(Mono.just(new Booking(null, null)), HttpStatus.NOT_FOUND);
-
-        old.setBookingStatus(status);
-        repository.save(old).subscribe();
-        return new ResponseEntity<>(repository.save(old), HttpStatus.OK);
+            old.setBookingStatus(status);
+            repository.save(old).subscribe();
+            return new ResponseEntity<>(repository.save(old), HttpStatus.OK);
 
     }
-
 }

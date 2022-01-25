@@ -9,10 +9,6 @@ public class RequestHTTPTimer {
 
     private static RequestHTTPTimer single_instance = null;
 
-    private Timer timer_http;
-    long start;
-    String booking;
-
     private List<ResponseTimer> responseTimerList = new ArrayList<>();
 
     public static RequestHTTPTimer getInstance()
@@ -36,12 +32,6 @@ public class RequestHTTPTimer {
             responseTimerList.remove(it);
             break;
         }
-    }
-
-
-
-    public String getBooking() {
-        return booking;
     }
 }
 
