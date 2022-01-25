@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "cf072f8b-8a9e-46b9-979a-6db0306d6ba2",
+		"name": "Richieste",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "K8S Creazione Utente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Kaido\", \"surname\":\"Rocks D.\",\"address\":\"Cima Onigashima\", \"phoneNo\":\"892892\"}"
+				},
+				"url": {
+					"raw": "fghotel.dsbd.loc/users",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Ricerca Utente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://fghotel.dsbd.loc/users/ricerca/61f0670365220500074bfb8f",
+					"protocol": "http",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"users",
+						"ricerca",
+						"61f0670365220500074bfb8f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Visualizza Utenti",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://fghotel.dsbd.loc/users/ricerca/",
+					"protocol": "http",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"users",
+						"ricerca",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Creazione Hotel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"nome\": \"Whole Cake Island\", \"stanze\":\"2\"}"
+				},
+				"url": {
+					"raw": "fghotel.dsbd.loc/hotel",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"hotel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Visualizza Hotel",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/hotel/",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"hotel",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Ricerca Hotel",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/hotel/61f06c4cee35880007ffaa30",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"hotel",
+						"61f06c4cee35880007ffaa30"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Creazione Booking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"userId\":\"61f0670365220500074bfb8f\", \"room\": \"1\",\"datebegin\":\"2022-02-17\",\"dateend\":\"2022-02-18\", \"idHotel\":\"61f066ccee35880007ffaa2e\"}"
+				},
+				"url": {
+					"raw": "fghotel.dsbd.loc/booking",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Visualizza Booking",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/booking/ricerca",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"booking",
+						"ricerca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "K8S Ricerca Booking",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/booking/ricerca/61f06e4a6b2f070007da23b7",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"booking",
+						"ricerca",
+						"61f06e4a6b2f070007da23b7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancella Prenotazione",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/booking/61f06e4a6b2f070007da23b7",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"booking",
+						"61f06e4a6b2f070007da23b7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancella Utente",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://fghotel.dsbd.loc/users/61f0670365220500074bfb8f",
+					"protocol": "http",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"users",
+						"61f0670365220500074bfb8f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancella Hotel",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/hotel/61f06c4cee35880007ffaa30",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"hotel",
+						"61f06c4cee35880007ffaa30"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
