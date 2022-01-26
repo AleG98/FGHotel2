@@ -139,3 +139,27 @@ Abbiamo inoltre utilizzato la funzione auto_arima allo scopo predirre il trend. 
 Applichiamo il modello all'intero set di dati  e successivamente facciamo il forecast dei valori futuri.
 
 ![](img/prevision_response3.png)
+ 
+
+# Comandi 
+minikube start --cpus=4 --driver=docker --memory=4096mb
+eval $(minikube docker-env)
+minikube addons enable ingress
+
+docker build -t booking-service:v1 /home/alessio/IdeaProjects/FGHotel2/booking-service
+docker build -t booking-orchestrator:v1 /home/alessio/IdeaProjects/FGHotel2/booking-orchestrator
+docker build -t user-service:v1 /home/alessio/IdeaProjects/FGHotel2/user-service
+docker build -t hotel-service:v1 /home/alessio/IdeaProjects/FGHotel2/hotel-service
+kubectl apply -f /home/alessio/IdeaProjects/FGHotel2/k8s/
+echo "$(minikube ip) fghotel.dsbd.loc." | sudo tee -a /etc/hosts
+### per grafana e prom
+kubectl create ns monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring 
+
+kubectl port-forward -n monitoring pod/prometheus-prometheus-kube-prometheus-prometheus-0  9090
+kubectl port-forward -n monitoring service/prometheus-grafana 3100:80
+
+
+### Per modificare il file per l'alert 
+helm upgrade -f values.yaml prometheus -n monitoring  prometheus-community/kube-prometheus-stack
