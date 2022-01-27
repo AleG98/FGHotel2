@@ -142,42 +142,36 @@ Applichiamo il modello all'intero set di dati  e successivamente facciamo il for
  
 
 # Comandi 
-minikube start --cpus=4 --driver=docker --memory=4096mb
+>minikube start --cpus=4 --driver=docker --memory=4096mb
+>
+>eval $(minikube docker-env)
+>
+>minikube addons enable ingress
+>
+>docker build -t booking-service:v1 /home/alessio/IdeaProjects/FGHotel2/booking-service
+>
+>docker build -t booking-orchestrator:v1 /home/alessio/IdeaProjects/FGHotel2/booking-orchestrator
+>
+>docker build -t user-service:v1 /home/alessio/IdeaProjects/FGHotel2/user-service
+>
+>docker build -t hotel-service:v1 /home/alessio/IdeaProjects/FGHotel2/hotel-service
+>
+>kubectl apply -f /home/alessio/IdeaProjects/FGHotel2/k8s/
+>
+>echo "$(minikube ip) fghotel.dsbd.loc." | sudo tee -a /etc/hosts
 
-eval $(minikube docker-env)
-
-minikube addons enable ingress
-
-
-docker build -t booking-service:v1 /home/alessio/IdeaProjects/FGHotel2/booking-service
-
-
-docker build -t booking-orchestrator:v1 /home/alessio/IdeaProjects/FGHotel2/booking-orchestrator
-
-
-docker build -t user-service:v1 /home/alessio/IdeaProjects/FGHotel2/user-service
-
-
-docker build -t hotel-service:v1 /home/alessio/IdeaProjects/FGHotel2/hotel-service
-
-
-kubectl apply -f /home/alessio/IdeaProjects/FGHotel2/k8s/
-
-echo "$(minikube ip) fghotel.dsbd.loc." | sudo tee -a /etc/hosts
 ### Grafana e Prometheus
 
-kubectl create ns monitoring
+>kubectl create ns monitoring
+>
+>helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+>
+>helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring 
+>
+>kubectl port-forward -n monitoring pod/prometheus-prometheus-kube-prometheus-prometheus-0  9090
+>
+>kubectl port-forward -n monitoring service/prometheus-grafana 3100:80
 
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+### Alert
 
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring 
-
-
-kubectl port-forward -n monitoring pod/prometheus-prometheus-kube-prometheus-prometheus-0  9090
-
-
-kubectl port-forward -n monitoring service/prometheus-grafana 3100:80
-
-
-### Alert 
-helm upgrade -f values.yaml prometheus -n monitoring  prometheus-community/kube-prometheus-stack
+>helm upgrade -f values.yaml prometheus -n monitoring  prometheus-community/kube-prometheus-stack
