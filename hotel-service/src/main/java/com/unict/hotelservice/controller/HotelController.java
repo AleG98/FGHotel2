@@ -5,8 +5,10 @@ import com.unict.hotelservice.model.Hotel;
 import com.unict.hotelservice.repository.ReactiveHotelRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +17,12 @@ import reactor.core.publisher.Mono;
 public class HotelController {
     @Autowired
     ReactiveHotelRepository repository;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value(value = "${KAFKA_CHECKOUT_TOPIC}")
+    private String checkoutTopic;
 
     @GetMapping("/")
     public Flux<Hotel> getHotels() {
@@ -51,4 +59,11 @@ public class HotelController {
         b.listen("BookingToDelete|" + id);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
+    @GetMapping("/checkout/{id}")
+    public ResponseEntity<Boolean> checkoutBooking(@PathVariable("id") String id) {
+        kafkaTemplate.send(checkoutTopic, "Checkout|" + id);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
 }

@@ -24,12 +24,21 @@ I microservizi in questione possono essere schematizzati come segue:
 
 ![](img/Diapositiva2.jpeg)
 
+
+
 Il processo di prenotazione della camera richiede due step: lo user-id indicato in fase di prenotazione deve essere già registrato, così come l'hotel-id. Tuttavia, per prenotare una stanza bisogna verificare se la stanza richiesta è disponibile per la data di prenotazione richiesta. Siamo così in presenza di una saga che gestiamo tramite orchestrator(booking-orchestrator).
 Sono presenti quindi quattro microservizi:
+
 -booking-service
+
 -booking-orchestrator
+
 -hotel-service
+
 -user-service
+
+Il microservizio hotel-service prevede la possibilità di effettuare il checkout per una determinata prenotazione: in tal caso richiede le informazioni della prenotazione al booking -service attraverso kafka. Nel caso in cui la prenotazione sia in uno stato di confirmed, l'hotel invia un messaggio attraverso kafka a un billing-service (non implementato) per la fatturazione.
+
 
 ## Saga
 La saga è così costituita:

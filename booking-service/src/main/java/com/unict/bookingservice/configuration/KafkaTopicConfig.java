@@ -20,6 +20,9 @@ public class KafkaTopicConfig {
     @Value(value = "${KAFKA_MAIN_TOPIC}")
     private String kafkaMainTopic;
 
+    @Value(value = "${KAFKA_CHECKOUT_TOPIC}")
+    private String checkoutResponseTopic;
+
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
@@ -30,5 +33,10 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic topic1() {
         return new NewTopic(kafkaMainTopic, 100, (short) 1);
+    }
+
+    @Bean
+    public NewTopic topic6() {
+        return new NewTopic(checkoutResponseTopic, 100, (short) 1);
     }
 }

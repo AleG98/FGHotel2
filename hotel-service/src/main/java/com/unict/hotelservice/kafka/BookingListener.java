@@ -30,6 +30,9 @@ public class BookingListener {
     @Value(value = "${KAFKA_MAIN_TOPIC}")
     private String mainTopic;
 
+    @Value(value = "${KAFKA_BILLING_TOPIC}")
+    private String billingTopic;
+
     @KafkaListener(topics="${KAFKA_MAIN_TOPIC}")
     public void listen(String message) {
         String[] messageParts = message.split("\\|");
@@ -59,6 +62,29 @@ public class BookingListener {
 
         }
 
+    }
+
+    @KafkaListener(topics="${KAFKA_CHECKOUT_TOPIC}")
+    public void checkoutListen(String message) {
+        System.out.println("Received message " + message);
+
+        String[] messageParts = message.split("\\|");
+
+        if (!messageParts[0].equals("Checkout")) {
+
+
+            if (messageParts[0].equals("CheckoutInfo")) {
+                System.out.println("Invio le info al billing service per l'emissione della fattura: " + message);
+                kafkaTemplate.send(billingTopic, "Billing:" + message);
+            }
+            if (messageParts[0].equals("BookingNotFound")) {
+                System.out.println("Prenotazione non trovata");
+            }
+            if (messageParts[0].equals("BookingNotConfirmed")) {
+                System.out.println("Prenotazione non confermata");
+            }
+
+        }
     }
 
 }

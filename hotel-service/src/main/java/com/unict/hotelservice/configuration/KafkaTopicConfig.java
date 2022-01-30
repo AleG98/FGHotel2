@@ -26,6 +26,12 @@ public class KafkaTopicConfig {
     @Value(value = "${KAFKA_HOTEL_RESPONSE_TOPIC}")
     private String hotelResponseTopic;
 
+    @Value(value = "${KAFKA_CHECKOUT_TOPIC}")
+    private String checkoutTopic;
+
+    @Value(value = "${KAFKA_BILLING_TOPIC}")
+    private String billingTopic;
+
 
 
     @Bean
@@ -48,6 +54,16 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic topic5() {
         return new NewTopic(hotelResponseTopic, 10, (short) 1);
+    }
+
+    @Bean
+    public NewTopic topic6() {
+        return new NewTopic(checkoutTopic, 10, (short) 1);
+    }
+
+    @Bean
+    public NewTopic topic7() {
+        return new NewTopic(billingTopic, 10, (short) 1);
     }
 
 

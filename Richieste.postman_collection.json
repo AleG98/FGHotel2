@@ -215,6 +215,27 @@
 			"response": []
 		},
 		{
+			"name": "K8S Checkout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "fghotel.dsbd.loc/hotel/checkout/61f6aa56f871e00007a6285f",
+					"host": [
+						"fghotel",
+						"dsbd",
+						"loc"
+					],
+					"path": [
+						"hotel",
+						"checkout",
+						"61f6aa56f871e00007a6285f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Cancella Prenotazione",
 			"request": {
 				"method": "DELETE",

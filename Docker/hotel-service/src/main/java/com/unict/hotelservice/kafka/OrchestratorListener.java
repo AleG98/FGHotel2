@@ -36,7 +36,7 @@ public class OrchestratorListener {
     @KafkaListener(topics = "${KAFKA_HOTEL_REQUEST_TOPIC}")
     public void listen(String message) {
 
-        String s = String.format("mongodb://%s:%s@%s:%s/", "root", "toor", "hotel-service-db", "27017");
+        String s = String.format("mongodb://%s:%s@%s:%s/", "root", "toor", "hotel-service-db", "27019");
         MongoTemplate mongoTemplate = new MongoTemplate(MongoClients.create(s),"admin");
 
         System.out.println("Received message dall'hotel request dell'orchestratore: " + message);

@@ -5,6 +5,8 @@ data:
   KAFKA_MAIN_TOPIC: main-topic
   KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
   KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
+  KAFKA_CHECKOUT_TOPIC: checkout-topic
+  KAFKA_BILLING_TOPIC: billing-topic
   MONGODB_HOSTNAME: hotel-service-db
   MONGODB_PORT: "27017"
 kind: ConfigMap

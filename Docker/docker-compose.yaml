@@ -43,6 +43,7 @@ services:
       KAFKA_ADDRESS: kafka:9092
       KAFKA_GROUP_ID: booking-service-group
       KAFKA_MAIN_TOPIC: main-topic
+      KAFKA_CHECKOUT_TOPIC: checkout-topic
       MONGODB_HOSTNAME: booking-service-db
       MONGODB_PORT: "27018"
       MONGO_AUTH_DB: admin
@@ -98,6 +99,8 @@ services:
       KAFKA_MAIN_TOPIC: main-topic
       KAFKA_HOTEL_REQUEST_TOPIC: hotel-request-topic
       KAFKA_HOTEL_RESPONSE_TOPIC: hotel-response-topic
+      KAFKA_CHECKOUT_TOPIC: checkout-topic
+      KAFKA_BILLING_TOPIC: billing-topic
       MONGODB_HOSTNAME: hotel-service-db
       MONGODB_PORT: "27019"
       MONGO_AUTH_DB: admin
